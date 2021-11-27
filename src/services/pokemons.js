@@ -4,10 +4,9 @@ const headers = {
   'Content-Type': 'application/json'
 };
 
-export const getAllPokemons = async (limit = '?limit=20&offset=0') => {
+export const getAllPokemons = async (limit = '?limit=24&offset=0') => {
   let responseJson = undefined;
-  console.log('----->>>> baseUrl: ', baseUrl);
-  const endPoint = baseUrl.concat(limit);
+  const endPoint = baseUrl.concat('/pokemon/', limit);
   try {
     const response = await window.fetch(endPoint, {
       method: 'GET',
@@ -25,8 +24,25 @@ export const getAllPokemons = async (limit = '?limit=20&offset=0') => {
 
 export const getSinglePokemon = async (pokemonName) => {
   let responseJson = undefined;
-  const endPoint = baseUrl.concat('/', pokemonName);
-  console.log('----->>>> baseUrl: ', endPoint);
+  const endPoint = baseUrl.concat('/pokemon/', pokemonName);
+  try {
+    const response = await window.fetch(endPoint, {
+      method: 'GET',
+      headers
+    });
+    responseJson = await response.json();
+  } catch (error) {
+    responseJson = {
+      ok: false,
+      error
+    };
+  }
+  return responseJson;
+};
+
+export const searchByAbility = async (ability) => {
+  let responseJson = undefined;
+  const endPoint = baseUrl.concat('/ability/', ability);
   try {
     const response = await window.fetch(endPoint, {
       method: 'GET',

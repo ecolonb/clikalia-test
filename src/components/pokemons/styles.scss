@@ -2,9 +2,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   min-height: 100vh;
-  padding: 3rem 0.5rem;
+  padding: 1rem 0.5rem;
   .pokemon-container {
     display: flex;
     flex-direction: column;
@@ -15,7 +15,9 @@
       flex-wrap: wrap;
       align-items: center;
       justify-content: center;
+      max-width: 1150px;
       .card-container {
+        cursor: pointer;
         display: flex;
         flex-direction: column;
         align-items: center;

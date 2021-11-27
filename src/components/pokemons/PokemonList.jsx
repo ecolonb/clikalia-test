@@ -1,45 +1,66 @@
 import { useEffect, useState } from 'react';
-import { getAllPokemons, getSinglePokemon } from 'services/pokemons';
+import { useDispatch, useSelector } from 'react-redux';
+
 import PokemonCard from './PokemonCard';
+import { pokemonAdd, pokemonSetActive } from 'redux/actions/pokemons';
+import { uiSetloading, uiUnSetloading } from 'redux/actions/ui';
+import { getAllPokemons, getSinglePokemon } from 'services/pokemons';
 import './styles.scss';
 
 export default function PokemonList() {
-  const [pokemonList, setPokemonList] = useState([]);
+  const dispatch = useDispatch();
+  const { pokemonList } = useSelector((state) => state.pokemons);
   const [allPokemons, setAllPokemons] = useState([]);
+
   const getAll = async () => {
     try {
+      dispatch(uiSetloading());
       const data = await getAllPokemons();
       setAllPokemons(data.results);
     } catch (error) {
-      console.log('error: ', error);
+      console.error('error: ', error);
+      dispatch(uiUnSetloading());
     }
   };
 
-  const getPokemon = async (name) => {
-    const pokemon = await getSinglePokemon(name);
-    setPokemonList((currentState) => [...currentState, pokemon]);
-  };
-
   useEffect(() => {
-    getAll();
+    if (pokemonList.length === 0) getAll();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    allPokemons.forEach((pokemon) => getPokemon(pokemon.name));
+    try {
+      const getPokemons = async () => {
+        const getPokemon = async (name) => {
+          dispatch(uiSetloading());
+          const pokemon = await getSinglePokemon(name);
+          dispatch(pokemonAdd(pokemon));
+          dispatch(uiUnSetloading());
+        };
+
+        for (const pokemon of allPokemons) {
+          await getPokemon(pokemon.name);
+        }
+      };
+      getPokemons();
+    } catch (error) {
+      dispatch(uiUnSetloading());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allPokemons]);
+  const handleClick = (activePokemon) =>
+    dispatch(pokemonSetActive(activePokemon));
 
   return (
     <div className='pokemon-wrapper'>
-      <h1>Pokemon Evolution</h1>
+      <h1>Pokemons List</h1>
       <div className='pokemon-container'>
         <div className='all-pokemons'>
           {pokemonList.map((pokemon, index) => (
             <PokemonCard
               key={index}
-              id={pokemon.id}
-              image={pokemon.sprites.other.dream_world.front_default}
-              name={pokemon.name}
-              type={pokemon.types[0].type.name}
+              pokemon={pokemon}
+              handleClick={handleClick}
             />
           ))}
         </div>
