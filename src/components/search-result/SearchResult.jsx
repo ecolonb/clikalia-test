@@ -4,15 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import PokemonCard from 'components/pokemons/PokemonCard';
 import { pokemonSetActive } from 'redux/actions/pokemons';
 import { uiSetloading, uiUnSetloading } from 'redux/actions/ui';
-import {
-  getAllPokemons,
-  searchByAbility,
-  getSinglePokemon
-} from 'services/pokemons';
+import { searchByAbility, getSinglePokemon } from 'services/pokemons';
 
-export default function SearchResult() {
+export default function SearchResult({ className }) {
   const dispatch = useDispatch();
-  const { searchValue, searchFor } = useSelector((state) => state.pokemons);
+  const { searchValue, searchFor, inSearch } = useSelector(
+    (state) => state.pokemons
+  );
 
   const [pokemonList, setPokemonList] = useState([]);
   const [allPokemons, setAllPokemons] = useState([]);
@@ -23,7 +21,7 @@ export default function SearchResult() {
         dispatch(uiSetloading());
         switch (searchFor) {
           case 'name':
-            const result = await getAllPokemons(searchValue);
+            const result = await getSinglePokemon(searchValue);
             setPokemonList(result?.ok ? [result] : []);
             break;
           case 'ability':
@@ -41,9 +39,10 @@ export default function SearchResult() {
     };
     getPokemonList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [inSearch, searchFor]);
 
   useEffect(() => {
+    setPokemonList([]);
     const getPokemons = async () => {
       const getPokemon = async (name) => {
         dispatch(uiSetloading());
@@ -56,7 +55,6 @@ export default function SearchResult() {
         await getPokemon(pokemon.name);
       }
     };
-
     getPokemons();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allPokemons]);
@@ -65,7 +63,7 @@ export default function SearchResult() {
     dispatch(pokemonSetActive(activePokemon));
 
   return pokemonList.length > 0 ? (
-    <div className='pokemon-wrapper'>
+    <div className={'pokemon-wrapper ' + className}>
       <h1>Pokemons List</h1>
       <div className='pokemon-container'>
         <div className='all-pokemons'>
@@ -80,6 +78,6 @@ export default function SearchResult() {
       </div>
     </div>
   ) : (
-    <p className='align-center bold'>0 Results</p>
+    <p className={'align-center bold ' + className}>0 Results</p>
   );
 }

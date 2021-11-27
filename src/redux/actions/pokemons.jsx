@@ -21,3 +21,11 @@ export const pokemonSetInSearch = (event) => ({
   type: types.pokemonSetInSearch,
   payload: event
 });
+export const pokemonSetCurrentPage = (event) => ({
+  type: types.pokemonSetCurrentPage,
+  payload: event
+});
+export const pokemonDeleteAll = (event) => ({
+  type: types.pokemonDeleteAll,
+  payload: []
+});

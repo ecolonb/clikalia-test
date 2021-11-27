@@ -14,8 +14,8 @@ export default function Home() {
     <div className='page-wrapper'>
       <img className='poke-api-image' src={pokeImage} alt='pokeapi' />
       <SearchBox />
-      {!inSearch && <PokemonList />}
-      {inSearch && <SearchResult />}
+      <PokemonList className={inSearch ? 'display-none' : ''} />
+      <SearchResult className={!inSearch ? 'display-none' : ''} />
       <Loading />
       <Pokedex />
     </div>

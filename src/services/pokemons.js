@@ -4,8 +4,9 @@ const headers = {
   'Content-Type': 'application/json'
 };
 
-export const getAllPokemons = async (limit = '?limit=24&offset=0') => {
+export const getAllPokemons = async (page = 1) => {
   let responseJson = undefined;
+  const limit = `?limit=${24}&offset=${(page - 1) * 24}`;
   const endPoint = baseUrl.concat('/pokemon/', limit);
   try {
     const response = await window.fetch(endPoint, {
@@ -13,6 +14,7 @@ export const getAllPokemons = async (limit = '?limit=24&offset=0') => {
       headers
     });
     responseJson = await response.json();
+    responseJson.ok = true;
   } catch (error) {
     responseJson = {
       ok: false,
@@ -31,6 +33,7 @@ export const getSinglePokemon = async (pokemonName) => {
       headers
     });
     responseJson = await response.json();
+    responseJson.ok = true;
   } catch (error) {
     responseJson = {
       ok: false,
@@ -49,6 +52,7 @@ export const searchByAbility = async (ability) => {
       headers
     });
     responseJson = await response.json();
+    responseJson.ok = true;
   } catch (error) {
     responseJson = {
       ok: false,

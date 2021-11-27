@@ -5,5 +5,7 @@ export const types = {
   pokemonSetActive: '[POKEMONS]SetActive',
   pokemonSetSearchFor: '[POKEMONS]SetSearchFor',
   pokemonSetSearchValue: '[POKEMONS]SetSearchValue',
-  pokemonSetInSearch: '[POKEMONS]SetInSearch'
+  pokemonSetInSearch: '[POKEMONS]SetInSearch',
+  pokemonSetCurrentPage: '[POKEMONS]SetCurrentPage',
+  pokemonDeleteAll: '[POKEMONS]DeleteAll'
 };

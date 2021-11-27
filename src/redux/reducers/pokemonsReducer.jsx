@@ -5,7 +5,8 @@ const initialState = {
   activePokemon: null,
   searchFor: 'name',
   searchValue: '',
-  inSearch: false
+  inSearch: false,
+  currentPage: 1
 };
 
 export const pokemonsReducer = (state = initialState, action = {}) => {
@@ -34,6 +35,16 @@ export const pokemonsReducer = (state = initialState, action = {}) => {
       return {
         ...state,
         inSearch: action.payload
+      };
+    case types.pokemonSetCurrentPage:
+      return {
+        ...state,
+        currentPage: action.payload
+      };
+    case types.pokemonDeleteAll:
+      return {
+        ...state,
+        pokemonList: []
       };
     default:
       return state;

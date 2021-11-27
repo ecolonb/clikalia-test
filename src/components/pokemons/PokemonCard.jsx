@@ -1,6 +1,6 @@
 const PokemonCard = ({ pokemon, handleClick }) => {
   const { id, name } = pokemon;
-  const pokemonType = pokemon.types[0].type.name;
+  const pokemonType = pokemon?.types ? pokemon?.types[0]?.type.name : '';
   const className = pokemonType + ' card-container';
   const image =
     pokemon.sprites?.other?.dream_world?.front_default ||
